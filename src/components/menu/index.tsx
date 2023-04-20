@@ -17,12 +17,12 @@ interface menuItemProps {
 }
 const defaultMenuItemProps:menuItemProps = {
   currentIndex: 0,
-  itemSelect:(index=0)=>{}
+  itemSelect:()=>{}
 }
 export const menuContext = createContext(defaultMenuItemProps)
 const Menu: React.FC<MenuProps> = (props) => {
   const { style, defaultIndex, className, mode, onSelect, children } = props
-  const [currentIndex, setCurrentIndex] = useState(defaultIndex)
+  const [currentIndex, setCurrentIndex] = useState(defaultIndex)//active状态值
   const defaultItemProps:menuItemProps = {
     currentIndex: currentIndex||0,
     itemSelect: (index: number) => {
@@ -36,7 +36,7 @@ const Menu: React.FC<MenuProps> = (props) => {
     //此方法判断是否为menuItem组件，且依次返回子组件在父组件中的索引
    return React.Children.map(children, (child, index) => {
     const ch = child as React.FunctionComponentElement<MenuItemProps>
-     if (ch.type.displayName === 'menu-item') {
+     if (ch.type.displayName === 'menu-item') {//是否为menuItem组件
      return  React.cloneElement(ch,{index})//给children新增index属性
     } else {
       console.error('do not use other element');
