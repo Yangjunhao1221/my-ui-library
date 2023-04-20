@@ -1,5 +1,6 @@
 import React, { createContext, useState } from 'react'
 import classnames from 'classnames'
+import { MenuItemProps } from '../menuItem'
 type selectFn = (index: number) => void
 export type modeType = 'vertical' | 'horizontal'
 export interface MenuProps {
@@ -31,6 +32,19 @@ const Menu: React.FC<MenuProps> = (props) => {
       }
     }
   }
+  const renderChildren = () => {
+    //此方法判断是否为menuItem组件，且依次返回子组件在父组件中的索引
+   return React.Children.map(children, (child, index) => {
+    const ch = child as React.FunctionComponentElement<MenuItemProps>
+     if (ch.type.displayName === 'menu-item') {
+     return  React.cloneElement(ch,{index})//给children新增index属性
+    } else {
+      console.error('do not use other element');
+   }
+    
+  })
+  }
+
   const classes = classnames("viking-menu", className, {
     "menu-vertical": mode === "vertical", // 竖-菜单(默认横)
     "menu-horizontal": mode !== "vertical",
@@ -39,7 +53,7 @@ const Menu: React.FC<MenuProps> = (props) => {
   return (
     <ul style={style} className={classes} data-testid="test-menu">
       <menuContext.Provider value={defaultItemProps}>
-            {children}
+            {renderChildren()}
       </menuContext.Provider>
     </ul>
   )

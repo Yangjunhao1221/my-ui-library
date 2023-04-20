@@ -2,7 +2,7 @@
 import React from "react";
 import Button from "./index";
 import { fireEvent, render } from "@testing-library/react";
-import { buttonType,buttonSize,allButtonAttribute } from "./index";
+import { buttonType,buttonSize } from "./index";
 const defaultProps = {
     onClick:jest.fn()
 }

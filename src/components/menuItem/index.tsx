@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import classnames from 'classnames'
 import { menuContext } from '../menu'
-interface MenuItemProps {
-    index: number,
+export interface MenuItemProps {
+    index?: number,
     children?: React.ReactNode,
     style?: React.CSSProperties,
     className?: string,
@@ -15,7 +15,7 @@ const MenuItem: React.FC<MenuItemProps> = (props) => {
         "is-disabled": disabled,'is-active':index===currentIndex
     })
     const handler = () => {
-        if (itemSelect&&!disabled) {
+        if (itemSelect&&!disabled&&typeof index==='number') {
             itemSelect(index)   
         }
      }
@@ -25,4 +25,5 @@ const MenuItem: React.FC<MenuItemProps> = (props) => {
         </li>
     )
 }
+MenuItem.displayName='menu-item'//给组件添加测试名称
 export default MenuItem

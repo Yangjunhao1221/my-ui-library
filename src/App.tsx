@@ -3,7 +3,6 @@ import Button from './components/Button/index'
 import { buttonType, buttonSize } from './components/Button/index';
 import Menu from './components/menu';
 import MenuItem from './components/menuItem';
-import { modeType } from './components/menu';
 function App() {
   return (
     <div className="App">
