@@ -1,5 +1,5 @@
 import React from "react";
-import {cleanup, fireEvent, render, RenderResult,} from "@testing-library/react"
+import {cleanup, fireEvent, render, RenderResult, waitFor} from "@testing-library/react"
 import Menu, {MenuProps} from "../menu";
 import MenuItem from "../menuItem";
 import SubMenu from "./SubMenu";
@@ -14,7 +14,19 @@ const testVerProps: MenuProps = {
     defaultIndex: '0',
     mode: "vertical"
 }
-
+const createStyleFile = () => {
+    const cssFile: string = `.viking-submenu{
+    display:none;
+    }
+    .viking-submenu.menu-opened{
+    display:block;
+    }
+    `
+    const style = document.createElement(('style'))
+    style.type = 'text/css'
+    style.innerHTML = cssFile
+    return style
+}
 const generateMenu = (props: MenuProps) => {
     return (
         <Menu {...props}>
@@ -26,7 +38,7 @@ const generateMenu = (props: MenuProps) => {
                     disabled
                 </MenuItem>
                 <MenuItem>
-                    1
+                    weqe
                 </MenuItem>
                 <MenuItem>
                     2
@@ -52,6 +64,7 @@ describe("test Menu And MenuItem component", () => {
         // getByTestId: 通过属性 data-testid 来获取对应的  DOM
         // eslint-disable-next-line testing-library/prefer-screen-queries
         menuElement = wrapper.getByTestId("test-menu")
+        wrapper.container.append(createStyleFile())
         // eslint-disable-next-line testing-library/prefer-screen-queries
         activeElement = wrapper.getByText("active")
         // eslint-disable-next-line testing-library/prefer-screen-queries
@@ -63,7 +76,8 @@ describe("test Menu And MenuItem component", () => {
         expect(menuElement).toBeInTheDocument()
         expect(menuElement).toHaveClass("viking-menu test")
         // eslint-disable-next-line testing-library/no-node-access
-        expect(menuElement.querySelectorAll('').length).toEqual(3)
+        // 这里的:scope表示menuElement本身
+        expect(menuElement.querySelectorAll(':scope >li').length).toEqual(3)
         expect(activeElement).toHaveClass("menu-item is-active")
         expect(disabledElement).toHaveClass("menu-item is-disabled")
 
@@ -100,6 +114,20 @@ describe("test Menu And MenuItem component", () => {
         // 测试修改menu为纵向是 className 中是否存在vertical
         expect(menuElement).toHaveClass("menu-vertical")
 
+    })
+    it('测试SubMenu', async () => {
+        expect(wrapper.queryByText('disabled')).not.toBeVisible()
+        const dropdownElement = wrapper.getByText('一级菜单')
+        // fireEvent.mouseEnter(dropdownElement)
+        // await waitFor(() => {
+        //     expect(wrapper.queryByText('weqe')).toBeVisible()
+        // })
+        // fireEvent.click(wrapper.getByText('weqe'))
+        // expect(testProps.onSelect).toHaveBeenCalledWith('3-1')
+        // fireEvent.mouseLeave(dropdownElement)
+        // await waitFor(() => {
+        //     expect(wrapper.queryByText('weqe')).not.toBeVisible()
+        // })
     })
 
 })

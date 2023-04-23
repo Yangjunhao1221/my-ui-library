@@ -17,6 +17,7 @@ const SubMenu: React.FC<SubMenuProps> = (props) => {
     const initOpenStatus = (mode === 'vertical' && index) ? defaultOpenSubMenuYes.includes(index) : false
     const classes = classnames(className, "menu-item submenu-item", {'is-active': index === currentIndex})
     const [openStatus, setOpenStatus] = useState(initOpenStatus)
+
     //判断菜单栏状态
     const mouse = mode === 'horizontal' ? {
         onMouseEnter: (e: React.MouseEvent) => {
