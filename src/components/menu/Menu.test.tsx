@@ -5,13 +5,13 @@ import MenuItem from "../menuItem";
 import SubMenu from "./SubMenu";
 
 const testProps: MenuProps = {
-    defaultIndex: 0,
+    defaultIndex: '0',
     onSelect: jest.fn(),
     className: "test"
 }
 
 const testVerProps: MenuProps = {
-    defaultIndex: 0,
+    defaultIndex: '0',
     mode: "vertical"
 }
 
@@ -32,7 +32,6 @@ const generateMenu = (props: MenuProps) => {
                     2
                 </MenuItem>
             </SubMenu>
-
             <MenuItem>
                 goods
             </MenuItem>
@@ -64,7 +63,7 @@ describe("test Menu And MenuItem component", () => {
         expect(menuElement).toBeInTheDocument()
         expect(menuElement).toHaveClass("viking-menu test")
         // eslint-disable-next-line testing-library/no-node-access
-        expect(menuElement.getElementsByTagName("li").length).toEqual(3)
+        expect(menuElement.querySelectorAll('').length).toEqual(3)
         expect(activeElement).toHaveClass("menu-item is-active")
         expect(disabledElement).toHaveClass("menu-item is-disabled")
 
@@ -78,7 +77,7 @@ describe("test Menu And MenuItem component", () => {
         expect(thirdItem).toHaveClass("is-active")
         expect(activeElement).not.toHaveClass("is-active")
         // 验证是否已使用正确的参数调用了所监视的方法
-        expect(testProps.onSelect).toHaveBeenCalledWith(2)
+        expect(testProps.onSelect).toHaveBeenCalledWith('2')
         // 检查原本选中的菜单是否存在 is-active
         expect(activeElement).not.toHaveClass("is-active")
         fireEvent.click(disabledElement)

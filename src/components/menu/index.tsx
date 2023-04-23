@@ -2,7 +2,7 @@ import React, {createContext, useState} from 'react'
 import classnames from 'classnames'
 import {MenuItemProps} from '../menuItem'
 
-type selectFn = (index: number) => void
+type selectFn = (index: string) => void
 export type modeType = 'vertical' | 'horizontal'
 
 export interface MenuProps {
@@ -11,38 +11,47 @@ export interface MenuProps {
     mode?: modeType,
     onSelect?: selectFn,
     children?: React.ReactNode,
-    defaultIndex?: number
+    defaultIndex?: string,
+    defaultOpenSubMenu?: Array<string>
 }
 
 interface menuItemProps {
     itemSelect?: selectFn
-    currentIndex: number
+    currentIndex: string,
+    mode?: string,
+    defaultOpenSubMenu?: Array<string>
 }
 
 const defaultMenuItemProps: menuItemProps = {
-    currentIndex: 0,
+    currentIndex: '0',
     itemSelect: () => {
-    }
+    },
+    mode: 'horizontal'
+
 }
 export const menuContext = createContext(defaultMenuItemProps)
 const Menu: React.FC<MenuProps> = (props) => {
-    const {style, defaultIndex, className, mode, onSelect, children} = props
+    const {style, defaultIndex, className, mode, onSelect, children, defaultOpenSubMenu} = props
     const [currentIndex, setCurrentIndex] = useState(defaultIndex)//active状态值
     const defaultItemProps: menuItemProps = {
-        currentIndex: currentIndex || 0,
-        itemSelect: (index: number) => {
+        currentIndex: currentIndex || '0',
+        mode,
+        itemSelect: (index: string) => {
             setCurrentIndex(index)
             if (onSelect) {
                 onSelect(index)
             }
-        }
+        },
+        defaultOpenSubMenu
     }
     const renderChildren = () => {
         //此方法判断是否为menuItem组件，且依次返回子组件在父组件中的索引
         return React.Children.map(children, (child, index) => {
+
             const ch = child as React.FunctionComponentElement<MenuItemProps>
-            if (ch.type.displayName === 'menu-item') {//是否为menuItem组件
-                return React.cloneElement(ch, {index})//给children新增index属性
+            // console.log(ch.type.displayName)
+            if (ch.type.displayName === 'menu-item' || ch.type.displayName === 'SubMenu') {//是否为menuItem组件
+                return React.cloneElement(ch, {index: index + ''})//给children新增index属性
             } else {
                 console.error('do not use other element');
             }
@@ -65,6 +74,7 @@ const Menu: React.FC<MenuProps> = (props) => {
 }
 Menu.defaultProps = {
     mode: 'horizontal',
-    defaultIndex: 0
+    defaultIndex: '0',
+    defaultOpenSubMenu: []
 }
 export default Menu
