@@ -23,14 +23,22 @@
       cursor: default;
     }
 
+    .viking-icon {
+      transition: transform 0.2s ease-out;
+    }
+
     &.is-active,
     &:hover {
       color: $menu-item-active-color;
       border-bottom: $menu-item-active-border-width solid $menu-item-active-color;
 
+      .viking-icon.icon-active {
+        transform: rotate(180deg);
+      }
     }
 
   }
+
 
   .submenu-item {
     position: relative;
@@ -65,11 +73,20 @@
   }
 
   .viking-submenu.viking-submenu-open {
-    display: block;
+    //display: block;
   }
 
+  .viking-icon {
+    margin-left: 5px;
+  }
+
+  .viking-clickIcon {
+    transform: rotate(180deg);
+  }
+
+
   .viking-submenu {
-    display: none;
+    //display: none;
     list-style: none;
     padding-left: 0;
     white-space: nowrap;
@@ -103,7 +120,7 @@
     background: $white;
     z-index: 100;
     top: calc(100% + 8px);
-    left: 0;
+    left: 10%;
     border: $menu-border-width solid $menu-border-color;
     box-shadow: $submenu-box-shadow;
   }

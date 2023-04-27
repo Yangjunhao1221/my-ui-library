@@ -1,0 +1,17 @@
+.subeMenu-node-enter {
+  opacity: 0;
+}
+
+.subeMenu-node-enter-active {
+  opacity: 1;
+  transition: opacity 400ms;
+}
+
+.subeMenu-node-exit {
+  //opacity: 1;
+}
+
+.subeMenu-node-exit-active {
+  opacity: 0;
+  transition: opacity 400ms;
+}

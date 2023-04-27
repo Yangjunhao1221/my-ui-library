@@ -3,7 +3,11 @@
     font-size: $font-size;
     border-radius: $border-raduis;
   }
-  
+  @mixin input-size($padding-y, $padding-x, $font-size, $border-raduis){
+    padding: $padding-y $padding-x;
+    font-size: $font-size;
+    border-radius: $border-raduis;
+  }
   @mixin button-style($background,
     $border,
     $color,
@@ -14,13 +18,13 @@
     color: $color;
     background-color: $background;
     border-color: $border;
-  
+
     &:hover {
       color: $hover-color;
       background: $hover-background;
       border-color: $hover-border;
     }
-  
+
     &:focus,
     &.focus {
       color: $hover-color;
@@ -28,7 +32,7 @@
       border-color: $hover-border;
       outline: none
     }
-  
+
     &:disabled,
     &.disabled {
       color: $color;

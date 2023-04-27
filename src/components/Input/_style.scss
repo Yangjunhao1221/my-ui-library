@@ -1,0 +1,106 @@
+.input-main {
+  display: inline-block;
+
+  .viking-input {
+    border: 1px solid rgba(73, 72, 76, 0.21);
+    box-sizing: border-box;
+    border-radius: 5px;
+    transition: all .1s linear;
+    //outline: 1px solid rgba(73, 72, 76, 0.21); //边框不用border，用outline
+  }
+
+  .viking-input:focus {
+    border: 1px solid rgb(13, 110, 253);
+    outline: 0px solid rgb(13, 110, 253);
+  }
+
+  .input-lg {
+    @include input-size($input-padding-y-lg, $input-padding-y-lg, $input-font-size-lg, $border-radius-lg)
+  }
+
+  .start-lg {
+    @include input-size($input-padding-y-lg, $input-padding-y-lg, $input-font-size-lg, 0)
+  }
+
+  .end-lg {
+    @include input-size($input-padding-y-lg, $input-padding-y-lg, $input-font-size-lg, 0)
+
+  }
+
+  .input-sm {
+    @include input-size($input-padding-y-sm, $input-padding-y-sm, $input-font-size-sm, $border-radius-sm)
+  }
+
+  .start-sm {
+    @include input-size($input-padding-y-sm, $input-padding-y-sm, $input-font-size-sm, 0)
+  }
+
+  .end-sm {
+    @include input-size($input-padding-y-sm, $input-padding-y-sm, $input-font-size-sm, 0);
+  }
+
+
+  .is-icon {
+    padding-right: 35px;
+  }
+
+  .icon-lg, .start-lg {
+    font-size: $input-font-size-lg;
+  }
+
+  .icon-sm, .end-sm {
+    font-size: $input-font-size-sm;
+  }
+
+  .icon-disabled {
+    color: rgba(78, 76, 76, 0.29);
+  }
+
+  .input-container {
+    position: relative;
+    display: inline-block;
+    box-sizing: border-box;
+
+    .is-haveStart {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    .is-haveEnd {
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
+  }
+
+  .input-icon {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    right: 5px;
+  }
+
+  .input-start {
+    display: inline-block;
+    height: 100%;
+    border: 1px solid rgba(73, 72, 76, 0.21);
+    border-right: 0;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+
+  .input-end {
+    display: inline-block;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding-left: 5px;
+    height: 100%;
+    border: 1px solid rgba(73, 72, 76, 0.21);
+    border-left: 0;
+  }
+
+
+}
+
+
+
+

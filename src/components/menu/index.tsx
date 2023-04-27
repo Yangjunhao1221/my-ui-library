@@ -47,7 +47,6 @@ const Menu: React.FC<MenuProps> = (props) => {
     const renderChildren = () => {
         //此方法判断是否为menuItem组件，且依次返回子组件在父组件中的索引
         return React.Children.map(children, (child, index) => {
-
             const ch = child as React.FunctionComponentElement<MenuItemProps>
             // console.log(ch.type.displayName)
             if (ch.type.displayName === 'menu-item' || ch.type.displayName === 'SubMenu') {//是否为menuItem组件
@@ -55,10 +54,8 @@ const Menu: React.FC<MenuProps> = (props) => {
             } else {
                 console.error('do not use other element');
             }
-
         })
     }
-
     const classes = classnames("viking-menu", className, {
         "menu-vertical": mode === "vertical", // 竖-菜单(默认横)
         "menu-horizontal": mode !== "vertical",
