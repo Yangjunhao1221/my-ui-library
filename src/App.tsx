@@ -11,40 +11,46 @@ import Icon from "./components/Icon";
 import AutoComplete, {autoCompleteDataType} from "./components/AutoComplete";
 
 
+interface itemResType {
+    login: string
+}
+
 library.add(fas)//添加所有图标
 export interface listProps {
     number: number,
+    value: string
 }
 
 function App() {
 
-    const data = [{value: 'yjh', number: 1}, {value: 'j', number: 2}]
-    const seacrhFnHanlde = (str: string): autoCompleteDataType<listProps>[] => {
-        return data.filter(item => {
-            return item.value.includes(str)
-        })
-        //异步
-        // setTimeout(async () => {
-        //     let arr: autoCompleteDataType[] = []
-        //     arr = await data.filter(item => {
-        //         return item.value.includes(str)
-        //     })
-        //     return arr
-        // }, 3000)
-        // 模拟请求
-        // fetch('/a').then(async (res) => {
-        //     const arr: autoCompleteDataType[] = await res.json()
-        //     if (arr.length) {
-        //         return arr.filter(i => {
-        //             return i.value.includes(str)
-        //         })
-        //     }
+    const data: listProps[] = [{value: 'yjh', number: 1}, {value: 'j', number: 2}]
+    const seacrhFnHanlde = async (str: string) => {
+        // 同步
+        // return data.filter(item => {
+        //     return item.value.includes(str)
         // })
+        //异步
+        return fetch(`https://api.github.com/search/users?q=${str}`).then(res => res.json()).then(({items}) => {
+            return items.map((item: itemResType) => ({
+                value: item.login,
+                ...item
+            }))
+        })
+
     }
-    const se = (val: autoCompleteDataType[]) => {
+    const se = (val: autoCompleteDataType) => {
         console.log(val)
     }
-
+    const customTemplete = (item: autoCompleteDataType) => {
+        const item1 = item as autoCompleteDataType<listProps>
+        return (
+            <div>
+                <h1>
+                    name: {item1.value} age: 0
+                </h1>
+            </div>
+        )
+    }
     return (
         <div className="App">
             <header className="App-header">
@@ -89,7 +95,8 @@ function App() {
                 </Menu>
                 &nbsp; <Input size={'sm'} icon={'calendar-days'}
                               startNode={<Icon icon='calendar-days'></Icon>} endNode={'.com'}></Input>
-                <AutoComplete value={'111'} searchFn={seacrhFnHanlde} Selcte={se}></AutoComplete>
+                <AutoComplete value={'111'} searchFn={seacrhFnHanlde} Selcte={se} customTemplete={customTemplete}
+                ></AutoComplete>
             </header>
         </div>
     );

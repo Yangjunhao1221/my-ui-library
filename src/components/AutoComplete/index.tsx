@@ -1,6 +1,7 @@
 // @flow
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, ReactElement, useState} from 'react';
 import Input, {InputProps} from "../Input";
+import classnames from "classnames";
 //满足需求
 // 1.用户可传入查询函数支持异步
 // 2.可传入onSelect获取当前搜索后点击筛选菜单中的值
@@ -15,20 +16,19 @@ interface requiredProps {
 export  type autoCompleteDataType<T = {}> = T & requiredProps
 
 export interface autoCompleteProps extends Omit<InputProps, 'onsSelcte'> {
-    searchFn: (str: string) => autoCompleteDataType[],
-    Selcte?: (str: autoCompleteDataType[]) => void,
-    customTemplete?: () => {}//自定义模板
+    searchFn: (str: string) => autoCompleteDataType[] | Promise<autoCompleteDataType[]>,
+    Selcte?: (str: autoCompleteDataType) => void,
+    customTemplete?: (item: autoCompleteDataType) => ReactElement//自定义模板
 }
 
 const AutoComplete: React.FC<autoCompleteProps> = (props) => {
-    const {searchFn, Selcte, value, ...restProps} = props
+    const {searchFn, Selcte, value, customTemplete, ...restProps} = props
     const [inputValue, setInputValue] = useState(value)
     const [list, setList] = useState<autoCompleteDataType[]>([])
     const filterList = (data: autoCompleteDataType[]) => {
-        if (data.length) {
+        if (data && data.length) {
             setList(data)
         }
-
     }
     const listClick = (item: autoCompleteDataType) => {
         if (Selcte) {
@@ -38,17 +38,26 @@ const AutoComplete: React.FC<autoCompleteProps> = (props) => {
         setList([])
     }
     const renderList = () => {
+        const classes = classnames('li-style')
         return (
             list.map((item, index) => {
-                return <li key={index} onClick={() => listClick(item)}>{item.value}</li>
+                return <li className={classes} key={index}
+                           onClick={() => listClick(item)}>{customTemplete ? customTemplete(item) : item.value}</li>
             })
         )
     }
-    const inputChangeHandle = (e: ChangeEvent<HTMLInputElement>) => {
+    const inputChangeHandle = async (e: ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value.trim()
         if (val) {
             setInputValue(val)
-            filterList(searchFn(val))
+            const res = searchFn(val)
+            if (res instanceof Promise) {
+                res.then(res => {
+                    filterList(res)
+                })
+            } else {
+                filterList(res)
+            }
         } else {
             setInputValue('')
             setList([])
@@ -59,7 +68,7 @@ const AutoComplete: React.FC<autoCompleteProps> = (props) => {
             <Input {...restProps} value={inputValue} onChange={inputChangeHandle}></Input>
             <ul>
                 {
-                    list.length ? renderList() : ''
+                    list.length > 0 && renderList()
                 }
             </ul>
         </div>
