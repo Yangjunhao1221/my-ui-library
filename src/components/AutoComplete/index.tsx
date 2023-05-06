@@ -1,7 +1,8 @@
 // @flow
-import React, {ChangeEvent, ReactElement, useState} from 'react';
+import React, {ChangeEvent, ReactElement, useEffect, useState} from 'react';
 import Input, {InputProps} from "../Input";
 import classnames from "classnames";
+import useDebounce from "../../hooks/useDebounce";
 //满足需求
 // 1.用户可传入查询函数支持异步
 // 2.可传入onSelect获取当前搜索后点击筛选菜单中的值
@@ -13,6 +14,7 @@ interface requiredProps {
     value: string
 }
 
+type inputFnType = (e: ChangeEvent<HTMLInputElement>) => void
 export  type autoCompleteDataType<T = {}> = T & requiredProps
 
 export interface autoCompleteProps extends Omit<InputProps, 'onsSelcte'> {
@@ -23,8 +25,9 @@ export interface autoCompleteProps extends Omit<InputProps, 'onsSelcte'> {
 
 const AutoComplete: React.FC<autoCompleteProps> = (props) => {
     const {searchFn, Selcte, value, customTemplete, ...restProps} = props
-    const [inputValue, setInputValue] = useState(value)
+    const [inputValue, setInputValue] = useState(value as string)
     const [list, setList] = useState<autoCompleteDataType[]>([])
+    const debounceVal = useDebounce(inputValue, 3000)
     const filterList = (data: autoCompleteDataType[]) => {
         if (data && data.length) {
             setList(data)
@@ -46,11 +49,9 @@ const AutoComplete: React.FC<autoCompleteProps> = (props) => {
             })
         )
     }
-    const inputChangeHandle = async (e: ChangeEvent<HTMLInputElement>) => {
-        const val = e.target.value.trim()
-        if (val) {
-            setInputValue(val)
-            const res = searchFn(val)
+    useEffect(() => {
+        if (debounceVal) {
+            const res = searchFn(debounceVal as string)
             if (res instanceof Promise) {
                 res.then(res => {
                     filterList(res)
@@ -62,6 +63,10 @@ const AutoComplete: React.FC<autoCompleteProps> = (props) => {
             setInputValue('')
             setList([])
         }
+    }, [debounceVal])
+    const inputChangeHandle: inputFnType = (e: ChangeEvent<HTMLInputElement>) => {
+        const val = e.target.value.trim()
+        setInputValue(val)
     }
     return (
         <div>
@@ -74,4 +79,7 @@ const AutoComplete: React.FC<autoCompleteProps> = (props) => {
         </div>
     );
 };
+AutoComplete.defaultProps = {
+    value: ''
+}
 export default AutoComplete

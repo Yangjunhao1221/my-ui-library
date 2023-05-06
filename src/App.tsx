@@ -95,7 +95,7 @@ function App() {
                 </Menu>
                 &nbsp; <Input size={'sm'} icon={'calendar-days'}
                               startNode={<Icon icon='calendar-days'></Icon>} endNode={'.com'}></Input>
-                <AutoComplete value={'111'} searchFn={seacrhFnHanlde} Selcte={se} customTemplete={customTemplete}
+                <AutoComplete searchFn={seacrhFnHanlde} Selcte={se} customTemplete={customTemplete}
                 ></AutoComplete>
             </header>
         </div>
